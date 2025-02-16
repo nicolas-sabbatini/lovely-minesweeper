@@ -86,4 +86,5 @@ COLOR_PALETT = {
 	c_929a9c = rgb.exaToTable(0x929a9c),
 	c_6f7d85 = rgb.exaToTable(0x6f7d85),
 	c_596674 = rgb.exaToTable(0x596674),
+	c_000000 = rgb.exaToTable(0),
 }
