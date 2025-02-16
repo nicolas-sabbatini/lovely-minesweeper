@@ -33,8 +33,13 @@ MAIN_SCREEN = LETTERBOX.newLetterbox({
 	},
 } --[[@as letterbox.Upscale.Normal]])
 
--- Img
+-- GUI
 GUI = love.graphics.newImage("assets/16x16-min-ui.png")
+GUI_9_SIZE = 16 * 3
+
+FONT_SMALL = love.graphics.newFont("assets/Zerove-Regular.ttf", 10)
+FONT_MEDIUM = love.graphics.newFont("assets/Zerove-Regular.ttf", 20)
+FONT_BIG = love.graphics.newFont("assets/Zerove-Regular.ttf", 30)
 
 -- OS
 ---@type 'OS X' | 'Windows' | 'Linux' | 'Android' | 'iOS' | "Web"

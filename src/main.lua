@@ -13,7 +13,9 @@ end
 
 function love.load() end
 
-function love.update(dt) end
+function love.update(dt)
+	top_bar.update(dt)
+end
 
 function love.draw()
 	top_bar.draw()
