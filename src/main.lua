@@ -14,6 +14,20 @@ end
 function love.load() end
 
 function love.update(dt)
+	local x, y = love.mouse.getPosition()
+
+	local rigs_world_positions = MAIN_SCREEN:parentToRigsWorld(x, y)
+	MOUSE_WORLD_POSITIONS = {}
+	for _, v in pairs(rigs_world_positions) do
+		MOUSE_WORLD_POSITIONS[v.name] = v.coordinates
+	end
+
+	local rigs_screen_positions = MAIN_SCREEN:parentToRigsScreen(x, y)
+	MOUSE_SCREEN_POSITIONS = {}
+	for _, v in pairs(rigs_screen_positions) do
+		MOUSE_SCREEN_POSITIONS[v.name] = v.coordinates
+	end
+
 	top_bar.update(dt)
 end
 
