@@ -1,4 +1,5 @@
 require("globals")
+
 local top_bar = require("top_bar")
 
 love.graphics.setDefaultFilter("nearest", "nearest")
@@ -35,7 +36,7 @@ function love.draw()
 	top_bar.draw()
 
 	MAIN_SCREEN:drawInsideRig()
-	love.graphics.clear(COLOR_PALETT["c_596674"])
+	love.graphics.clear(COLOR_PALETT.GARY_DARK)
 	MAIN_SCREEN:stopDrawInsideRig()
 
 	MAIN_SCREEN:draw()

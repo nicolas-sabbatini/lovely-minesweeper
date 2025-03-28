@@ -1,12 +1,13 @@
 local p = require("vendors.pizza")
 
+local btn_name = "new_game_btn"
+
 local text = love.graphics.newText(FONT_MEDIUM, "NEW GAME")
 local tw, th = text:getDimensions()
 local padding = 30
 local btn_w, btn_h = tw + padding, th + padding
 
 local selected = false
-local time = 0
 
 local canvas = LETTERBOX.newLetterbox({
 	type = "constant",
@@ -15,7 +16,7 @@ local canvas = LETTERBOX.newLetterbox({
 		width = btn_w,
 		height = btn_h,
 	},
-} --[[@as letterbox.Upscale.Constant]], "new_game_btn")
+} --[[@as letterbox.Upscale.Constant]], btn_name)
 -- Position 1
 local base = p.fromRec(GUI, GUI_9_SIZE, 0, GUI_9_SIZE, GUI_9_SIZE)
 base:resize(btn_w, btn_h)
@@ -30,10 +31,10 @@ function new_game_btn.get()
 end
 
 function new_game_btn.update(dt)
-	time = time + dt
-	if time > 5 then
-		selected = not selected
-		time = 0
+	if MOUSE_SCREEN_POSITIONS[btn_name] then
+		selected = true
+	else
+		selected = false
 	end
 end
 
