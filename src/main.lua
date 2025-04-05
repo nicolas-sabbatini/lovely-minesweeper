@@ -1,6 +1,7 @@
 require("globals")
+require("commands")
 
-local top_bar = require("top_bar")
+local gui = require("gui")
 
 love.graphics.setDefaultFilter("nearest", "nearest")
 
@@ -12,7 +13,9 @@ function love.resize()
 	MAIN_SCREEN:parentResizeCallback({ width = w, height = h })
 end
 
-function love.load() end
+function love.load()
+	CMD_OPEN_NEW_GAME_MODAL()
+end
 
 function love.update(dt)
 	-- Update globals
@@ -30,11 +33,16 @@ function love.update(dt)
 	INPUT.updateInput()
 
 	-- Update components
-	top_bar.update(dt)
+	gui.update(dt)
+
+	-- Debug
+	if INPUT.mouse.justPressed(2) then
+		CMD_ENABLE_NEW_GAME_BTN()
+	end
 end
 
 function love.draw()
-	top_bar.draw()
+	gui.draw()
 
 	-- Draw screen
 	MAIN_SCREEN:drawInsideRig()

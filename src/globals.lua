@@ -37,9 +37,9 @@ MAIN_SCREEN = LETTERBOX.newLetterbox({
 GUI = love.graphics.newImage("assets/16x16-min-ui.png")
 GUI_9_SIZE = 16 * 3
 
-FONT_SMALL = love.graphics.newFont("assets/monogram.ttf", 15, "mono")
-FONT_MEDIUM = love.graphics.newFont("assets/monogram.ttf", 25, "mono")
-FONT_BIG = love.graphics.newFont("assets/monogram.ttf", 35, "mono")
+FONT_SMALL = love.graphics.newFont("assets/monogram.ttf", 16, "mono")
+FONT_MEDIUM = love.graphics.newFont("assets/monogram.ttf", 24, "mono")
+FONT_BIG = love.graphics.newFont("assets/monogram.ttf", 32, "mono")
 
 -- OS
 ---@type 'OS X' | 'Windows' | 'Linux' | 'Android' | 'iOS' | "Web"
@@ -55,6 +55,7 @@ local rgb = require("vendors.rgb")
 COLOR_PALETT = {
 	GARY_DARK = rgb.exaToTable(0x596674),
 	BLACK = rgb.exaToTable(0),
+	WHITE = rgb.exaToTable(0xffffff),
 }
 
 -- Input

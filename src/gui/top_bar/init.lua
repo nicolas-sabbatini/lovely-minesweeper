@@ -1,5 +1,5 @@
-local p = require("vendors.pizza")
-local new_game_btn = require("top_bar.new_game_btn")
+local pizza = require("vendors.pizza")
+local new_game_btn = require("gui.top_bar.new_game_btn")
 
 local canvas = LETTERBOX.newLetterbox({
 	type = "constant",
@@ -12,12 +12,12 @@ local canvas = LETTERBOX.newLetterbox({
 canvas:addChildren(new_game_btn.get())
 MAIN_SCREEN:addChildren(canvas)
 
-local slice = p.fromRec(GUI, 0, 0, GUI_9_SIZE, GUI_9_SIZE)
+local slice = pizza.fromRec(GUI, 0, 0, GUI_9_SIZE, GUI_9_SIZE)
 slice:resize(GAME_WIDTH, 64)
 
 local top_bar = {}
 
-function top_bar.update(dt)
+function top_bar.update()
 	new_game_btn.update()
 end
 
