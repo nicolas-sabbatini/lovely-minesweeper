@@ -27,7 +27,7 @@ function love.update(dt)
 	for _, v in pairs(rigs_screen_positions) do
 		MOUSE_SCREEN_POSITIONS[v.name] = v.coordinates
 	end
-	INPUT:updateInput()
+	INPUT.updateInput()
 
 	-- Update components
 	top_bar.update(dt)

@@ -58,6 +58,4 @@ COLOR_PALETT = {
 }
 
 -- Input
-local simple_keyboard = require("vendors.simple_keyboard")
----@diagnostic disable-next-line: param-type-mismatch
-INPUT = simple_keyboard.createInstance({})
+INPUT = require("vendors.simple_keyboard")

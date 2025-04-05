@@ -37,7 +37,7 @@ function new_game_btn.update(dt)
 		selected = false
 	end
 
-	if selected and INPUT:mJustPressed(1) then
+	if selected and INPUT.mouse.justPressed(1) then
 		Tape.log("debug", "click")
 	end
 end

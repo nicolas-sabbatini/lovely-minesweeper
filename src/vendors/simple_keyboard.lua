@@ -3,7 +3,7 @@ simple_keyboard.lua v4.0.0
 
 The MIT License (MIT)
 
-Copyright (c) 2024 Nicolás Sabbatini
+Copyright (c) 2025 Nicolás Sabbatini
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,121 +24,124 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 --]]
 
+-- SimpleKeyboard v4.0.0
+-- A lightweight and simple input tracking helper for Love2D that tracks keyboard
+-- and mouse states, including "just pressed" and "just released" events.
+-- GitHub: https://github.com/nicolas-sabbatini/lovely-tools
+-- License: MIT License (c) 2025
+
+local keysPressed = {}
+local keysJustPressed = {}
+local keysJustReleased = {}
+local mousePressed = { false, false, false }
+local mouseJustPressed = {}
+local mouseJustReleased = {}
+
 ---@class SimpleKeyboardInstance
----@field private keysPressed {love.KeyConstant: boolean}
----@field private keysJustPressed {love.KeyConstant: boolean}
----@field private keysJustReleased {love.KeyConstant: boolean}
----@field private mousePressed {number: boolean}
----@field private mouseJustPressed {number: boolean}
----@field private mouseJustReleased {number: boolean}
 local SimpleKeyboard = {
 	_LICENSE = "MIT License - Copyright (c) 2024",
 	_URL = "https://github.com/nicolas-sabbatini/lovely-tools",
 	_VERSION = "v4.0.0",
+	keyboard = {},
+	mouse = {},
 }
 
----Create a new instance of simple keyboard.
----@param keys love.KeyConstant | love.KeyConstant[]
----@return SimpleKeyboardInstance - An instance of SimpleKeyboard
-function SimpleKeyboard.createInstance(keys)
-	local instance = setmetatable({
-		keysPressed = {},
-		keysJustPressed = {},
-		keysJustReleased = {},
-		mousePressed = { false, false, false },
-		mouseJustPressed = {},
-		mouseJustReleased = {},
-	}, { __index = SimpleKeyboard })
-	instance:keyBind(keys)
-	return instance
-end
-
----Bind a key or a table of keys to the instance.
----@param keys love.KeyConstant | love.KeyConstant[]
-function SimpleKeyboard:keyBind(keys)
+---Binds one or more keys for tracking.
+---After binding, their state will be tracked and accessible using `isDown`, `justPressed`, etc.
+---This must be called before checking key states.
+---@param keys love.KeyConstant | love.KeyConstant[] Key or list of keys to bind.
+function SimpleKeyboard.keyboard.bind(keys)
 	if not keys then
 		return
-	elseif type(keys) ~= "table" then
+	end
+	if type(keys) ~= "table" then
 		---@diagnostic disable-next-line: cast-local-type
 		keys = { keys }
 	end
 	for _, k in pairs(keys) do
-		self.keysPressed[k] = false
-		self.keysJustReleased[k] = false
-		self.keysJustPressed[k] = false
+		keysPressed[k] = false
+		keysJustReleased[k] = false
+		keysJustPressed[k] = false
 	end
 end
 
----Unbind a key or a table of keys in the instance.
----@param keys love.KeyConstant | love.KeyConstant[]
-function SimpleKeyboard:keyUnbind(keys)
+---Unbinds one or more previously bound keys.
+---@param keys love.KeyConstant | love.KeyConstant[] Key or list of keys to unbind.
+function SimpleKeyboard.keyboard.unbind(keys)
 	if not keys then
 		return
-	elseif type(keys) ~= "table" then
+	end
+	if type(keys) ~= "table" then
 		---@diagnostic disable-next-line: cast-local-type
 		keys = { keys }
 	end
 	for _, k in pairs(keys) do
-		self.keysPressed[k] = nil
-		self.keysJustReleased[k] = nil
-		self.keysJustPressed[k] = nil
+		keysPressed[k] = nil
+		keysJustReleased[k] = nil
+		keysJustPressed[k] = nil
 	end
 end
 
----Update the state of all bound keys.
-function SimpleKeyboard:updateInput()
-	for k, previus in pairs(self.keysPressed) do
-		self.keysPressed[k] = love.keyboard.isDown(k)
-		self.keysJustReleased[k] = previus and not self.keysPressed[k]
-		self.keysJustPressed[k] = (not previus) and self.keysPressed[k]
+---Updates the state of all bound keys and mouse buttons.
+---This function should be called once per frame, typically at the beginning of `love.update(dt)`.
+function SimpleKeyboard.updateInput()
+	for k, previous in pairs(keysPressed) do
+		local current = love.keyboard.isDown(k)
+		keysPressed[k] = current
+		keysJustReleased[k] = previous and not current
+		keysJustPressed[k] = not previous and current
 	end
-	for k, previus in pairs(self.mousePressed) do
-		self.mousePressed[k] = love.mouse.isDown(k)
-		self.mouseJustReleased[k] = previus and not self.mousePressed[k]
-		self.mouseJustPressed[k] = (not previus) and self.mousePressed[k]
+	for k, previous in pairs(mousePressed) do
+		local current = love.mouse.isDown(k)
+		mousePressed[k] = current
+		mouseJustReleased[k] = previous and not current
+		mouseJustPressed[k] = not previous and current
 	end
 end
 
----Return true if is the first frame the bound key is down.
----@param key love.KeyConstant
----@return boolean — True if the key is down, false if not.
-function SimpleKeyboard:justPressed(key)
-	return self.keysJustPressed[key]
+---Returns true if the key was just pressed this frame.
+---Requires the key to have been bound with `bind`.
+---@param key love.KeyConstant The key to check.
+---@return boolean True if the key was just pressed.
+function SimpleKeyboard.keyboard.justPressed(key)
+	return keysJustPressed[key]
 end
 
----Return true if a bound key is down.
----@param key love.KeyConstant
----@return boolean — True if the key is down, false if not.
-function SimpleKeyboard:isDown(key)
-	return self.keysPressed[key]
+---Returns true if the key is currently being held down.
+---Requires the key to have been bound with `bind`.
+---@param key love.KeyConstant The key to check.
+---@return boolean True if the key is down.
+function SimpleKeyboard.keyboard.isDown(key)
+	return keysPressed[key]
 end
 
----Return true if is the first frame the bound key is released.
----@param key love.KeyConstant
----@return boolean — True if the key is released, false if not.
-function SimpleKeyboard:justReleased(key)
-	return self.keysJustReleased[key]
+---Returns true if the key was just released this frame.
+---Requires the key to have been bound with `bind`.
+---@param key love.KeyConstant The key to check.
+---@return boolean True if the key was just released.
+function SimpleKeyboard.keyboard.justReleased(key)
+	return keysJustReleased[key]
 end
 
----Return true if is the first frame the button is down.
----@param button number
----@return boolean — True if the button is down, false if not.
-function SimpleKeyboard:mJustPressed(button)
-	return self.mouseJustPressed[button]
+---Returns true if the mouse button was just pressed this frame.
+---@param button number Mouse button index (1 = left, 2 = right, 3 = middle).
+---@return boolean True if the button was just pressed.
+function SimpleKeyboard.mouse.justPressed(button)
+	return mouseJustPressed[button]
 end
 
----Return true if the button is down.
----@param button number
----@return boolean — True if the button is down, false if not.
-function SimpleKeyboard:mIsDown(button)
-	return self.mousePressed[button]
+---Returns true if the mouse button is currently held down.
+---@param button number Mouse button index (1 = left, 2 = right, 3 = middle).
+---@return boolean True if the button is down.
+function SimpleKeyboard.mouse.isDown(button)
+	return mousePressed[button]
 end
 
----Return true if is the first frame the button is released.
----@param button number
----@return boolean — True if the button is released, false if not.
-function SimpleKeyboard:mJustReleased(button)
-	return self.mouseJustReleased[button]
+---Returns true if the mouse button was just released this frame.
+---@param button number Mouse button index (1 = left, 2 = right, 3 = middle).
+---@return boolean True if the button was just released.
+function SimpleKeyboard.mouse.justReleased(button)
+	return mouseJustReleased[button]
 end
 
 return SimpleKeyboard
