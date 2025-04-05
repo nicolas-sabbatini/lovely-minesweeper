@@ -30,7 +30,7 @@ function new_game_btn.get()
 	return canvas
 end
 
-function new_game_btn.update(dt)
+function new_game_btn.update()
 	if MOUSE_SCREEN_POSITIONS[btn_name] then
 		selected = true
 	else
@@ -38,7 +38,7 @@ function new_game_btn.update(dt)
 	end
 
 	if selected and INPUT.mouse.justPressed(1) then
-		Tape.log("debug", "click")
+		Tape.log("debug", "new game click")
 	end
 end
 

@@ -18,7 +18,7 @@ slice:resize(GAME_WIDTH, 64)
 local top_bar = {}
 
 function top_bar.update(dt)
-	new_game_btn.update(dt)
+	new_game_btn.update()
 end
 
 function top_bar.draw()
