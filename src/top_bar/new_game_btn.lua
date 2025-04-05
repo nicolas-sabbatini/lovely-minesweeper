@@ -36,6 +36,10 @@ function new_game_btn.update(dt)
 	else
 		selected = false
 	end
+
+	if selected and INPUT:mJustPressed(1) then
+		Tape.log("debug", "click")
+	end
 end
 
 function new_game_btn.draw()

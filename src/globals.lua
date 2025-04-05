@@ -56,3 +56,8 @@ COLOR_PALETT = {
 	GARY_DARK = rgb.exaToTable(0x596674),
 	BLACK = rgb.exaToTable(0),
 }
+
+-- Input
+local simple_keyboard = require("vendors.simple_keyboard")
+---@diagnostic disable-next-line: param-type-mismatch
+INPUT = simple_keyboard.createInstance({})
