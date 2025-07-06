@@ -35,7 +35,6 @@ end
 function new_game_modal.remove()
 	is_open = false
 	MAIN_SCREEN:removeChildren(name)
-	CMD_ENABLE_NEW_GAME_BTN()
 end
 
 function new_game_modal.update()

@@ -8,7 +8,7 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 function love.resize()
 	-- Si bien esta funcion trae el w, h hay casos en los que se buguea.
 	-- ya que calculamos unas cosas en el globals si el systema despues detecta que la config
-	-- es más grande que la pantalla se hace un resize pero no resizea de verdad
+	-- es más grande que la pantalla se hace un resize pero trigerea el evento
 	local w, h = love.graphics.getDimensions()
 	MAIN_SCREEN:parentResizeCallback({ width = w, height = h })
 end
