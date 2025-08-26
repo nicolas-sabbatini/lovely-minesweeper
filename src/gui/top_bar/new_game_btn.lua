@@ -1,66 +1,89 @@
-local pizza = require("vendors.pizza")
-
-local btn_name = "new_game_btn"
+local input = require("vendors.simple_keyboard")
 
 local text = love.graphics.newText(FONT_BIG, "NEW GAME")
 local tw, th = text:getDimensions()
 local padding = 30
-local btn_w, btn_h = tw + padding, th + padding
 
-local selected = false
 local can_click = true
 
-local canvas = LETTERBOX.newLetterbox({
-	type = "constant",
-	position = { x = (GAME_WIDTH - btn_w) / 2, y = (64 - btn_h) / 2 },
-	size = {
-		width = btn_w,
-		height = btn_h,
-	},
-} --[[@as letterbox.Upscale.Constant]], btn_name)
--- Position 1
-local base = pizza.fromRec(GUI, GUI_9_SIZE, 0, GUI_9_SIZE, GUI_9_SIZE)
-base:resize(btn_w, btn_h)
--- Position 2
-local acent = pizza.fromRec(GUI, GUI_9_SIZE * 2, 0, GUI_9_SIZE, GUI_9_SIZE)
-acent:resize(btn_w, btn_h)
+---@type ui_tree?
+local tree = nil
+
+---@param self ui_component
+local function custom_draw(self)
+	if can_click and self.is_hover then
+		GUI_LIGHT_SELECTED:render(self.position.x, self.position.y, self.size.width, self.size.height)
+	else
+		GUI_LIGHT:render(self.position.x, self.position.y, self.size.width, self.size.height)
+		love.graphics.setColor(0, 0, 0)
+	end
+	love.graphics.printf(
+		self.text,
+		self.font,
+		self.position.x + self.padding.left,
+		self.position.y + self.padding.top - 2,
+		self.size.width - self.padding.right - self.padding.left,
+		self.text_align
+	)
+	love.graphics.setColor(1, 1, 1)
+end
+
+---@param self ui_component
+local function update(self)
+	if can_click and input.mouse.justPressed(1) then
+		CMD_OPEN_NEW_GAME_MODAL()
+	end
+end
 
 local new_game_btn = {}
 
-function new_game_btn.get()
-	return canvas
+function new_game_btn.set_tree(new_tree)
+	tree = new_tree
 end
 
 function new_game_btn.update()
-	if can_click and MOUSE_SCREEN_POSITIONS[btn_name] then
-		selected = true
-	else
-		selected = false
+	if not tree then
+		return
 	end
+	tree:open({ sizing = { width = { t = "grow" }, height = { t = "grow" } } })
+	tree:close()
 
-	if selected and INPUT.mouse.justPressed(1) then
-		CMD_OPEN_NEW_GAME_MODAL()
-		Tape.log("debug", "new game click")
-	end
-end
+	tree:open({
+		layout = "top_bottom",
+		sizing = {
+			width = { t = "fit_content" },
+			height = { t = "grow" },
+		},
+	})
 
-function new_game_btn.draw()
-	canvas:drawInsideRig()
-	love.graphics.clear()
-	base:render(0, 0)
-	if selected then
-		love.graphics.draw(text, padding / 2, padding / 2 - 2)
-		acent:render(0, 0)
-	else
-		love.graphics.setColor(0, 0, 0)
-		love.graphics.draw(text, padding / 2, padding / 2 - 2)
-		love.graphics.setColor(1, 1, 1)
-	end
-	canvas:stopDrawInsideRig()
+	tree:open({ sizing = { width = { t = "grow" }, height = { t = "grow" } } })
+	tree:close()
+
+	tree:open({
+		padding = { left = padding, right = padding, top = padding / 3, bottom = padding / 3 },
+		sizing = {
+			width = { t = "fixed", size = tw + padding * 2 },
+			height = { t = "fixed", size = th + padding / 3 },
+		},
+		text = "NEW GAME",
+		text_align = "center",
+		font = FONT_BIG,
+		custom_draw = custom_draw,
+		update = update,
+	})
+	tree:close()
+
+	tree:open({ sizing = { width = { t = "grow" }, height = { t = "grow" } } })
+	tree:close()
+
+	tree:close()
+
+	tree:open({ sizing = { width = { t = "grow" }, height = { t = "grow" } } })
+	tree:close()
 end
 
 function new_game_btn.enable()
-	can_click = true
+	can_click = false
 end
 
 function new_game_btn.disable()

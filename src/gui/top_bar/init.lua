@@ -1,33 +1,29 @@
-local pizza = require("vendors.pizza")
+local gui_builder = require("vendors.kiss_ui")
+local tree = gui_builder()
+
 local new_game_btn = require("gui.top_bar.new_game_btn")
-
-local canvas = LETTERBOX.newLetterbox({
-	type = "constant",
-	position = { x = 0, y = 0 },
-	size = {
-		width = GAME_WIDTH,
-		height = 64,
-	},
-} --[[@as letterbox.Upscale.Constant]], "top_bar")
-canvas:addChildren(new_game_btn.get())
-MAIN_SCREEN:addChildren(canvas)
-
-local slice = pizza.fromRec(GUI, 0, 0, GUI_9_SIZE, GUI_9_SIZE)
-slice:resize(GAME_WIDTH, 64)
+new_game_btn.set_tree(tree)
 
 local top_bar = {}
 
 function top_bar.update()
+	tree:open({
+		sizing = {
+			width = { t = "fixed", size = GAME_WIDTH },
+			height = { t = "fixed", size = 64 },
+		},
+		custom_draw = function(self)
+			GUI_DARK:render(self.position.x, self.position.y, self.size.width, self.size.height)
+		end,
+	})
 	new_game_btn.update()
+	tree:close()
+
+	tree:calculate_layout(MOUSE_X, MOUSE_Y)
 end
 
 function top_bar.draw()
-	new_game_btn.draw()
-
-	canvas:drawInsideRig()
-	love.graphics.clear()
-	slice:render(0, 0)
-	canvas:stopDrawInsideRig()
+	tree:draw()
 end
 
 return top_bar

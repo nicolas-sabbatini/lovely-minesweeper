@@ -5,50 +5,27 @@ GAME_HEIGHT = 600
 require("vendors.tape")
 Tape.init("console")
 
--- Camera
-local _, _, flags = love.window.getMode()
-local monitor_width, monitor_height = love.window.getDesktopDimensions(flags.display)
-local start_width, start_height = love.graphics.getDimensions()
-if start_width > monitor_width or start_height > monitor_height then
-	local ratio = math.min(monitor_width / start_width, monitor_height / start_height)
-	ratio = math.max(ratio, 0.5)
-	start_width = start_width * ratio
-	start_height = start_height * ratio
-	---@diagnostic disable-next-line: param-type-mismatch
-	love.window.setMode(start_width, start_height, flags)
-end
-
-LETTERBOX = require("vendors.letterbox")
----@type letterbox.Rig.Normal
----@diagnostic disable-next-line: assign-type-mismatch
-MAIN_SCREEN = LETTERBOX.newLetterbox({
-	type = "normal",
-	parent = {
-		width = start_width,
-		height = start_height,
-	},
-	size = {
-		width = GAME_WIDTH,
-		height = GAME_HEIGHT,
-	},
-} --[[@as letterbox.Upscale.Normal]])
-
--- GUI
-GUI = love.graphics.newImage("assets/16x16-min-ui.png")
-GUI_9_SIZE = 16 * 3
+-- Assets
+local pizza = require("vendors.pizza")
+local image = love.graphics.newImage("assets/16x16-min-ui.png")
+local gui_size = 16 * 3
+GUI_DARK = pizza.fromRec(image, gui_size * 0, 0, gui_size, gui_size)
+GUI_LIGHT = pizza.fromRec(image, gui_size * 1, 0, gui_size, gui_size)
+GUI_DARK_SELECTED = pizza.fromRec(image, gui_size * 2, 0, gui_size, gui_size)
+GUI_LIGHT_SELECTED = pizza.fromRec(image, gui_size * 3, 0, gui_size, gui_size)
 
 FONT_SMALL = love.graphics.newFont("assets/monogram.ttf", 16, "mono")
 FONT_MEDIUM = love.graphics.newFont("assets/monogram.ttf", 24, "mono")
 FONT_BIG = love.graphics.newFont("assets/monogram.ttf", 32, "mono")
 
--- OS
+-- OS types
 ---@type 'OS X' | 'Windows' | 'Linux' | 'Android' | 'iOS' | "Web"
 OS = love.system.getOS()
 Tape.log("debug", "Runing on %s", OS)
 
 -- Mouse positions
-MOUSE_WORLD_POSITIONS = {}
-MOUSE_SCREEN_POSITIONS = {}
+MOUSE_X = 0
+MOUSE_Y = 0
 
 -- Color palett
 local rgb = require("vendors.rgb")
@@ -57,6 +34,3 @@ COLOR_PALETT = {
 	BLACK = rgb.exaToTable(0),
 	WHITE = rgb.exaToTable(0xffffff),
 }
-
--- Input
-INPUT = require("vendors.simple_keyboard")
