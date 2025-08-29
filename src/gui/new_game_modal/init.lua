@@ -39,8 +39,10 @@ function new_game_modal.update()
 			height = { t = "fixed", size = modal_height },
 		},
 		layout = "top_bottom",
+		child_gap = 10,
 		custom_draw = custom_draw,
 	})
+	-- Margin top
 	tree:open({
 		sizing = {
 			width = { t = "grow" },
@@ -48,6 +50,8 @@ function new_game_modal.update()
 		},
 	})
 	tree:close()
+	-- End
+	-- Game size
 	tree:open({
 		text_align = "center",
 		text = { { 0, 0, 0, 1 }, "SIZE" },
@@ -59,12 +63,49 @@ function new_game_modal.update()
 	})
 	tree:close()
 	tree:open({
-		text_align = "center",
-		text = { { 0, 0, 0, 1 }, "MINES" },
-		font = FONT_BIG,
 		sizing = {
 			width = { t = "grow" },
 			height = { t = "fit_content" },
+		},
+		child_gap = 10,
+	})
+	tree:open({
+		sizing = {
+			width = { t = "grow" },
+			height = { t = "grow" },
+		},
+	})
+	tree:close()
+	tree:open({
+		text = "SMALL",
+		text_align = "center",
+		font = FONT_MEDIUM,
+		padding = { left = 5, right = 5, top = 5, bottom = 5 },
+		sizing = {
+			width = { t = "fixed", size = 100 },
+			height = { t = "fixed", size = 20 },
+		},
+	})
+	tree:close()
+	tree:open({
+		text = "MEDIUM",
+		text_align = "center",
+		font = FONT_MEDIUM,
+		padding = { left = 5, right = 5, top = 5, bottom = 5 },
+		sizing = {
+			width = { t = "fixed", size = 100 },
+			height = { t = "fixed", size = 20 },
+		},
+	})
+	tree:close()
+	tree:open({
+		text = "LARGE",
+		text_align = "center",
+		font = FONT_MEDIUM,
+		padding = { left = 5, right = 5, top = 5, bottom = 5 },
+		sizing = {
+			width = { t = "fixed", size = 100 },
+			height = { t = "fixed", size = 20 },
 		},
 	})
 	tree:close()
@@ -76,6 +117,102 @@ function new_game_modal.update()
 	})
 	tree:close()
 	tree:close()
+	-- End game size
+	tree:open({
+		sizing = {
+			width = { t = "grow" },
+			height = { t = "grow" },
+		},
+	})
+	tree:close()
+	-- Amount mines
+	tree:open({
+		text_align = "center",
+		text = { { 0, 0, 0, 1 }, "MINES" },
+		font = FONT_BIG,
+		sizing = {
+			width = { t = "grow" },
+			height = { t = "fit_content" },
+		},
+	})
+	tree:close()
+
+	tree:open({
+		sizing = {
+			width = { t = "grow" },
+			height = { t = "fit_content" },
+		},
+		child_gap = 10,
+	})
+	tree:open({
+		sizing = {
+			width = { t = "grow" },
+			height = { t = "grow" },
+		},
+	})
+	tree:close()
+	tree:open({
+		text = "10",
+		text_align = "center",
+		font = FONT_MEDIUM,
+		padding = { left = 5, right = 5, top = 5, bottom = 5 },
+		sizing = {
+			width = { t = "fixed", size = 100 },
+			height = { t = "fixed", size = 20 },
+		},
+	})
+	tree:close()
+	tree:open({
+		text = "20",
+		text_align = "center",
+		font = FONT_MEDIUM,
+		padding = { left = 5, right = 5, top = 5, bottom = 5 },
+		sizing = {
+			width = { t = "fixed", size = 100 },
+			height = { t = "fixed", size = 20 },
+		},
+	})
+	tree:close()
+	tree:open({
+		text = "30",
+		text_align = "center",
+		font = FONT_MEDIUM,
+		padding = { left = 5, right = 5, top = 5, bottom = 5 },
+		sizing = {
+			width = { t = "fixed", size = 100 },
+			height = { t = "fixed", size = 20 },
+		},
+	})
+	tree:close()
+	tree:open({
+		sizing = {
+			width = { t = "grow" },
+			height = { t = "grow" },
+		},
+	})
+	tree:close()
+	tree:close()
+
+	-- End mines
+	-- Margin bottom
+	tree:open({
+		sizing = {
+			width = { t = "grow" },
+			height = { t = "grow" },
+		},
+	})
+	tree:close()
+	-- End margin
+	tree:open({
+		sizing = {
+			width = { t = "grow" },
+			height = { t = "fixed", size = 30 },
+		},
+		child_gap = 10,
+	})
+	tree:close()
+	tree:close()
+
 	tree:calculate_layout(MOUSE_X, MOUSE_Y, root_x, root_y)
 end
 

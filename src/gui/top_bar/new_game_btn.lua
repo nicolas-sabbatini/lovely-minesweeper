@@ -30,7 +30,7 @@ end
 
 ---@param self ui_component
 local function update(self)
-	if can_click and input.mouse.justPressed(1) then
+	if can_click and self.is_hover and input.mouse.justPressed(1) then
 		CMD_OPEN_NEW_GAME_MODAL()
 	end
 end
